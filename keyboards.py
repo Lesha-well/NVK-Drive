@@ -1,8 +1,9 @@
 ﻿from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from typing import Union, List
 
 TAGS = [
     "web", "ux/ui", "management", "backend", "frontend", "ml", "data", "cloud",
-    "android", "ios", "gamedev", "devops", "security", "python", 
+    "android", "ios", "gamedev", "devops", "security", "python",
     "js", "c++", "c#", "java"
 ]
 
@@ -43,7 +44,11 @@ def get_navigation_keyboard(current_index, total):
         keyboard.append(InlineKeyboardButton(text="Вперед ➡", callback_data=f"nav_next_{current_index}"))
     return InlineKeyboardMarkup(inline_keyboard=[keyboard]) if keyboard else None
 
-def get_tags_keyboard(selected: list[str] | None = None, confirm_text: str = "✅ Подтвердить", confirm_callback: str = "tags_confirm"):
+def get_tags_keyboard(
+    selected: Union[List[str], None] = None,
+    confirm_text: str = "✅ Подтвердить",
+    confirm_callback: str = "tags_confirm"
+) -> InlineKeyboardMarkup:
     """Клавиатура для выбора тегов с возможностью переключения."""
     selected = set(selected or [])
     rows = []
@@ -59,3 +64,18 @@ def get_tags_keyboard(selected: list[str] | None = None, confirm_text: str = "�
         rows.append(row)
     rows.append([InlineKeyboardButton(text=confirm_text, callback_data=confirm_callback)])
     return InlineKeyboardMarkup(inline_keyboard=rows)
+
+def get_commands_menu_keyboard() -> InlineKeyboardMarkup:
+    """Клавиатура со списком команд."""
+    commands = [
+        ("🚀 Начать (/start)", "command_start"),
+        ("👤 Моя анкета (/profile)", "command_profile"),
+        ("🔎 Поиск (/search)", "command_search"),
+        ("🧭 Найти по навыкам (/find)", "command_find"),
+        ("🗑 Удалить анкету (/delete_profile)", "command_delete_profile"),
+        ("📚 Справка (/help)", "command_help"),
+    ]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=text, callback_data=callback)] for text, callback in commands
+    ])
+    return keyboard
