@@ -1,5 +1,11 @@
 ﻿from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+TAGS = [
+    "web", "ux/ui", "management", "backend", "frontend", "ml", "data", "cloud",
+    "android", "ios", "gamedev", "devops", "security", "python", 
+    "js", "c++", "c#", "java"
+]
+
 def get_course_keyboard():
     """Клавиатура для выбора курса."""
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
@@ -36,3 +42,20 @@ def get_navigation_keyboard(current_index, total):
     if current_index < total - 1:
         keyboard.append(InlineKeyboardButton(text="Вперед ➡", callback_data=f"nav_next_{current_index}"))
     return InlineKeyboardMarkup(inline_keyboard=[keyboard]) if keyboard else None
+
+def get_tags_keyboard(selected: list[str] | None = None, confirm_text: str = "✅ Подтвердить", confirm_callback: str = "tags_confirm"):
+    """Клавиатура для выбора тегов с возможностью переключения."""
+    selected = set(selected or [])
+    rows = []
+    row = []
+    for i, tag in enumerate(TAGS, start=1):
+        active = tag in selected
+        text = f"{'✅ ' if active else ''}{tag}"
+        row.append(InlineKeyboardButton(text=text, callback_data=f"tag_{tag}"))
+        if i % 3 == 0:
+            rows.append(row)
+            row = []
+    if row:
+        rows.append(row)
+    rows.append([InlineKeyboardButton(text=confirm_text, callback_data=confirm_callback)])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
