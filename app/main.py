@@ -1,16 +1,16 @@
-﻿import asyncio
+import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
-from database import init_db
-from handlers import router
+from database.db import init_db
+from hd.handlers import router
 from dotenv import load_dotenv
 import os
 
 # Загрузка переменных окружения
 load_dotenv()
 
-async def set_bot_commands(bot: Bot):
+async def set_bot_commands(bot: Bot):    
     """Регистрация команд бота в Telegram."""
     commands = [
         BotCommand(command="/start", description="Начать работу с ботом"),
